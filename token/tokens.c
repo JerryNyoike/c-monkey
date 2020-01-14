@@ -7,7 +7,7 @@ typedef struct Token {
 } Token;
 
 enum {
-	EOF = -1,
+	EOF,
 	ILLEGAL,
 	
 	// Identifiers + literals
