@@ -2,7 +2,7 @@
 #define LET "LET"
 
 typedef struct Token {
-	char *Type;
+	int Type;
 	char *Literal;	
 } Token;
 
