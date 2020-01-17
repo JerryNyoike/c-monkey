@@ -1,7 +1,5 @@
 #include <stdlib.h>
 #include <string.h>
-#define FUNCTION "FUNCTION"
-#define LET "LET"
 
 typedef struct Token {
 	int Type;
@@ -19,6 +17,10 @@ Token initToken()
 enum {
 	EOF,
 	ILLEGAL,
+
+	// Keywords
+	LET,
+	FUNCTION,
 	
 	// Identifiers + literals
 	IDENT,
