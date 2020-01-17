@@ -1,21 +1,8 @@
 #include <string.h>
 #include <ctype.h>
-#include "../token/tokens.c"
-
-typedef struct Lexer {
-		char *input;
-		int position;		// current position in input
-		int readPosition;	// current reading position in input
-		char ch;			// current character under examination
-} Lexer;
-
-typedef struct Identifier {
-	char *start;
-	char *end;
-} Identifier;
+#include "../monkey.h"
 
 /* newIdentifier : return an initialized identifier struct */
-/* TODO: find better name for this struct as numbers also use it */
 Identifier newIdentifier ()
 {
 	Identifier id;
@@ -91,7 +78,6 @@ void consumeWhitespace(Lexer lx)
 	while (isspace(lx.ch))
 		readChar(lx);
 }
-
 
 /* nextToken : return token depending on char under examination */
 Token nextToken(Lexer lx)

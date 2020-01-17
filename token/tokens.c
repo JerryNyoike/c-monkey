@@ -1,10 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
-
-typedef struct Token {
-	int Type;
-	char *Literal;	
-} Token;
+#include "../monkey.h"
 
 /* initToken: set the Literal to NULL to ensure it's always initialised */
 Token initToken()
@@ -13,32 +9,6 @@ Token initToken()
 	tk.Literal = NULL;
 	return tk;
 }
-
-enum {
-	EOF,
-	ILLEGAL,
-
-	// Keywords
-	LET,
-	FUNCTION,
-	
-	// Identifiers + literals
-	IDENT,
-	INT,
-
-	// Operators
-	ASSIGN,
-	PLUS,
-
-	// Delimiters
-	COMMA,
-	SEMICOLON,
-
-	LPAREN,
-	RPAREN,
-	LBRACE,
-	RBRACE,
-};
 
 /* lookupIdentifier : checks if an identifier is a keyword or not */
 int lookupIdentifier(char *ident)
