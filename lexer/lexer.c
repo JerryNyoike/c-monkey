@@ -15,6 +15,7 @@ typedef struct Identifier {
 } Identifier;
 
 /* newIdentifier : return an initialized identifier struct */
+/* TODO: find better name for this struct as numbers also use it */
 Identifier newIdentifier ()
 {
 	Identifier id;
@@ -34,6 +35,18 @@ void readChar(Lexer lx)
 	
 	lx.position = lx.readPosition;
 	++lx.readPosition;
+}
+
+/* readNumber : */
+Identifier readNumber (Lexer lx)
+{
+	Identifier num = newIdentifier();
+	num.start = lx.input + lx.position;
+	while (isdigit(lx.ch))
+		readChar(lx);
+	num.end = lx.input + lx.position;
+
+	return num;
 }
 
 /* readIdentifier: read an identifier up until the first space is encountered */
@@ -121,6 +134,13 @@ Token nextToken(Lexer lx)
 				Identifier id = readIdentifier(lx);
 				memcpy(tk.Literal, id.start, (id.end-id.start));
 				tk.Type = lookupIdentifier(tk.Literal);
+
+				return tk;
+			} else if (isdigit(lx.ch)) {
+				tk.Type = INT;
+				Identifier num = readNumber(lx);
+				memcpy(tk.Literal, num.start, (num.end-num.start));
+
 				return tk;
 			} else {
 				tk = newToken(ILLEGAL, &lx.ch);
