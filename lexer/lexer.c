@@ -3,10 +3,10 @@
 #include "../token/tokens.c"
 
 typedef struct Lexer {
-	char *input;
-	int position;		// current position in input
-	int readPosition;	// current reading position in input
-	char ch;			// current character under examination
+		char *input;
+		int position;		// current position in input
+		int readPosition;	// current reading position in input
+		char ch;			// current character under examination
 } Lexer;
 
 typedef struct Identifier {
@@ -47,6 +47,7 @@ Identifier readIdentifier(Lexer lx)
 
 	return id;
 }
+
 /* newLexer : returns a Lexer struct */
 Lexer newLexer(char *input)
 {
@@ -65,10 +66,16 @@ Token newToken(int tokenType, char *ch)
 	return tk;
 }
 
+/* isLetter: */
+int isLetter(char ch)
+{
+	return ('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z') || (ch == '_');
+}
+
 /* nextToken : return token depending on char under examination */
 Token nextToken(Lexer lx)
 {
-	Token tk;
+	Token tk = initToken();
 
 	switch (lx.ch) {
 		case '=':
@@ -100,12 +107,14 @@ Token nextToken(Lexer lx)
 			tk.Type = EOF;
 			break;
 		default:
-			if (isalpha(lx.ch)) {
+			if (isLetter(lx.ch)) {
 				Identifier id = readIdentifier(lx);
-				memcopy(tk.Literal, id.start, (id.end-id.start));
+				memcpy(tk.Literal, id.start, (id.end-id.start));
+				return tk;
 			} else {
 				tk = newToken(ILLEGAL, &lx.ch);
 			}
+			break;
 	}
 
 	readChar(lx);
