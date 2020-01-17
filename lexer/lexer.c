@@ -72,10 +72,20 @@ int isLetter(char ch)
 	return ('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z') || (ch == '_');
 }
 
+/* consumeWhitespace : skip whitespace characters */
+void consumeWhitespace(Lexer lx)
+{
+	while (isspace(lx.ch))
+		readChar(lx);
+}
+
+
 /* nextToken : return token depending on char under examination */
 Token nextToken(Lexer lx)
 {
 	Token tk = initToken();
+
+	consumeWhitespace(lx);
 
 	switch (lx.ch) {
 		case '=':
@@ -110,6 +120,7 @@ Token nextToken(Lexer lx)
 			if (isLetter(lx.ch)) {
 				Identifier id = readIdentifier(lx);
 				memcpy(tk.Literal, id.start, (id.end-id.start));
+				tk.Type = lookupIdentifier(tk.Literal);
 				return tk;
 			} else {
 				tk = newToken(ILLEGAL, &lx.ch);
