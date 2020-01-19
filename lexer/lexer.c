@@ -113,7 +113,7 @@ Token nextToken(Lexer lx)
 			break;
 		case 0:
 			tk.Literal = "";
-			tk.Type = EOF;
+			tk.Type = _EOF;
 			break;
 		default:
 			if (isLetter(lx.ch)) {

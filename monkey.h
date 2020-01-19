@@ -1,8 +1,8 @@
 #include <stdlib.h>
 
 /* LANGUAGE SYMBOLS */
-enum {
-	EOF,
+enum symbols {
+	_EOF,
 	ILLEGAL,
 
 	// Keywords
@@ -60,7 +60,7 @@ int lookupIdentifier(char *ident);
 void readChar(Lexer lx);
 
 /* readNumber : */
-Identifier readNumber (Lexer lx);
+Identifier readNumber(Lexer lx);
 
 /* readIdentifier: read an identifier up until the first space is encountered */
 Identifier readIdentifier(Lexer lx);
