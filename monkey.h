@@ -50,14 +50,11 @@ typedef struct Identifier {
 /* TODO: find better name for this struct as numbers also use it */
 Identifier newIdentifier ();
 
-/* initToken: set the Literal to NULL to ensure it's always initialised */
-Token initToken();
-
 /* lookupIdentifier : checks if an identifier is a keyword or not */
 int lookupIdentifier(char *ident);
 
 /* readChar : reads the next character in input, set readPosition to 0 if at end of input */
-void readChar(Lexer lx);
+void readChar(Lexer *lx);
 
 /* readNumber : */
 Identifier readNumber(Lexer lx);
@@ -69,19 +66,19 @@ Identifier readIdentifier(Lexer lx);
 Lexer newLexer(char *input);
 
 /* newToken : returns a token struct */
-Token newToken(int tokenType, char *ch);
+void newToken(Token *tk, int tokenType, char *ch);
 
 /* isLetter: */
 int isLetter(char ch);
 
 /* consumeWhitespace : skip whitespace characters */
-void consumeWhitespace(Lexer lx);
+void consumeWhitespace(Lexer *lx);
 
 /* nextToken : return token depending on char under examination */
 Token nextToken(Lexer lx);
 
 /* initToken: set the Literal to NULL to ensure it's always initialised */
-Token initToken();
+void initToken(Token *tk);
 
 /* lookupIdentifier : checks if an identifier is a keyword or not */
 int lookupIdentifier(char *ident);

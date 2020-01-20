@@ -3,11 +3,9 @@
 #include "../monkey.h"
 
 /* initToken: set the Literal to NULL to ensure it's always initialised */
-Token initToken()
+void initToken(Token *tk)
 {
-	Token tk;
-	tk.Literal = NULL;
-	return tk;
+	tk->Literal = NULL;
 }
 
 /* lookupIdentifier : checks if an identifier is a keyword or not */

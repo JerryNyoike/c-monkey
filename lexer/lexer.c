@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include "../monkey.h"
@@ -12,16 +13,14 @@ Identifier newIdentifier ()
 }
 
 /* readChar : reads the next character in input, set readPosition to 0 if at end of input */
-void readChar(Lexer lx)
+void readChar(Lexer *lx)
 {
-	if(lx.readPosition >= strlen(lx.input)) {
-		lx.readPosition = 0;
-	} else {
-		lx.ch = *(lx.input + lx.readPosition);
-	}
-	
-	lx.position = lx.readPosition;
-	++lx.readPosition;
+	// check that we are not at the end of the input
+	if (lx->readPosition >= strlen(lx->input))
+		return;
+	else
+		lx->ch = *(lx->input + lx->readPosition);
+	lx->position = lx->readPosition++;
 }
 
 /* readNumber : */
@@ -30,7 +29,7 @@ Identifier readNumber (Lexer lx)
 	Identifier num = newIdentifier();
 	num.start = lx.input + lx.position;
 	while (isdigit(lx.ch))
-		readChar(lx);
+		readChar(&lx);
 	num.end = lx.input + lx.position;
 
 	return num;
@@ -42,7 +41,7 @@ Identifier readIdentifier(Lexer lx)
 	Identifier id = newIdentifier();
 	id.start = lx.input + lx.position;
 	while (isalpha(lx.ch))
-		readChar(lx);
+		readChar(&lx);
 	id.end = lx.input + lx.position;
 
 	return id;
@@ -53,17 +52,17 @@ Lexer newLexer(char *input)
 {
 	Lexer lx;
 	lx.input = input;
-	readChar(lx);
+	lx.position = 0;
+	lx.readPosition = lx.position;
+	readChar(&lx);
 	return lx;
 }
 
 /* newToken : returns a token struct */
-Token newToken(int tokenType, char *ch)
+void newToken(Token *tk, int tokenType, char *ch)
 {
-	Token tk;
-	tk.Type = tokenType;
-	tk.Literal = ch;
-	return tk;
+	tk->Type = tokenType;
+	tk->Literal = ch;
 }
 
 /* isLetter: */
@@ -73,67 +72,63 @@ int isLetter(char ch)
 }
 
 /* consumeWhitespace : skip whitespace characters */
-void consumeWhitespace(Lexer lx)
+void consumeWhitespace(Lexer *lx)
 {
-	while (isspace(lx.ch))
+	while (isspace(lx->ch))
 		readChar(lx);
 }
 
 /* nextToken : return token depending on char under examination */
 Token nextToken(Lexer lx)
 {
-	Token tk = initToken();
+	Token tk;
+	initToken(&tk);
 
-	consumeWhitespace(lx);
+	consumeWhitespace(&lx);
 
 	switch (lx.ch) {
 		case '=':
-			tk = newToken(ASSIGN, &lx.ch);
+			newToken(&tk, ASSIGN, &lx.ch);
 			break;
 		case ';':
-			tk = newToken(SEMICOLON, &lx.ch);
+			newToken(&tk, SEMICOLON, &lx.ch);
 			break;
 		case '(':
-			tk = newToken(LPAREN, &lx.ch);
+			newToken(&tk, LPAREN, &lx.ch);
 			break;
 		case ')':
-			tk = newToken(RPAREN, &lx.ch);
+			newToken(&tk, RPAREN, &lx.ch);
 			break;
 		case ',':
-			tk = newToken(COMMA, &lx.ch);
+			newToken(&tk, COMMA, &lx.ch);
 			break;
 		case '+':
-			tk = newToken(PLUS, &lx.ch);
+			newToken(&tk, PLUS, &lx.ch);
 			break;
 		case '{':
-			tk = newToken(LBRACE, &lx.ch);
+			newToken(&tk, LBRACE, &lx.ch);
 			break;
 		case '}':
-			tk = newToken(LBRACE, &lx.ch);
+			newToken(&tk, LBRACE, &lx.ch);
 			break;
 		case 0:
-			tk.Literal = "";
-			tk.Type = _EOF;
+			newToken(&tk, _EOF, "");
 			break;
 		default:
 			if (isLetter(lx.ch)) {
 				Identifier id = readIdentifier(lx);
-				memcpy(tk.Literal, id.start, (id.end-id.start));
-				tk.Type = lookupIdentifier(tk.Literal);
-
+				newToken(&tk, lookupIdentifier(tk.Literal), memcpy(tk.Literal, id.start, (id.end-id.start)));
 				return tk;
 			} else if (isdigit(lx.ch)) {
-				tk.Type = INT;
 				Identifier num = readNumber(lx);
-				memcpy(tk.Literal, num.start, (num.end-num.start));
-
+				newToken(&tk, INT, memcpy(tk.Literal, num.start, (num.end-num.start)));
 				return tk;
 			} else {
-				tk = newToken(ILLEGAL, &lx.ch);
+				 newToken(&tk, ILLEGAL, &lx.ch);
 			}
 			break;
 	}
 
-	readChar(lx);
+	readChar(&lx);
 	return tk;
 }
