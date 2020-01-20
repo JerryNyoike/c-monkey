@@ -11,26 +11,56 @@ int testsRun = 0;
 /* TESTS */
 int testNextToken()
 {
-	char *input = "=+(){},;";
+	//char *input = "=+(){},;";
+	char *input2 = "let five = 5;let ten = 10;     let add = fn(x, y) { x + y;};    let result = add(five, ten);}";
 
 	Token tokens[] = {
+		{ LET, "let" },
+		{ IDENT, "five" },
 		{ ASSIGN, "=" },
-		{ PLUS, "+" },
+		{ INT, "5" },
+		{ SEMICOLON, ";" },
+		{ LET, "let" },
+		{ IDENT, "ten" },
+		{ ASSIGN, "=" },
+		{ INT, "10"},
+		{ SEMICOLON, ";" },
+		{ LET, "let" },
+		{ IDENT, "add" },
+		{ ASSIGN, "=" },
+		{ FUNCTION,"fn" },
 		{ LPAREN, "(" },
+		{ IDENT, "x" },
+		{ COMMA, "," },
+		{ IDENT, "y" },
 		{ RPAREN, ")" },
 		{ LBRACE, "{" },
+		{ IDENT, "x" },
+		{ PLUS, "+" },
+		{ IDENT, "y" },
+		{ SEMICOLON, ";" },
 		{ RBRACE, "}" },
-		{ COMMA, "," },
-		{ SEMICOLON, ";" }
+		{ SEMICOLON, ";" },
+		{ LET, "let" },
+		{ IDENT, "result" },
+		{ ASSIGN, "=" },
+		{ IDENT, "add" },
+		{ LPAREN, "(" },
+		{ IDENT, "five" },
+		{ PLUS, "+" },
+		{ IDENT, "ten" },
+		{ SEMICOLON, ";" },
+		{ _EOF, "" }
 	};
 
 	Token t;
-	Lexer l = newLexer(input);
+	initToken(&t);
+	Lexer l = newLexer(input2);
 	int i = 0;
 	int numtokens = (sizeof tokens) / (sizeof t);
-	while(i <= numtokens-1) {
+	while(i <= numtokens) {
 		nextToken(&l, &t);
-		printf("%d\n", t.Type);
+		printf("%d\n", (int) strlen(t.Literal));
 		_assert(t.Type == tokens[i++].Type);
 	}
 	return 0;
