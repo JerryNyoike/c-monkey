@@ -13,12 +13,26 @@ int testNextToken()
 {
 	char *input = "=+(){},;";
 
-	Token token = { ASSIGN, "="};
+	Token tokens[] = {
+		{ ASSIGN, "=" },
+		{ PLUS, "+" },
+		{ LPAREN, "(" },
+		{ RPAREN, ")" },
+		{ LBRACE, "{" },
+		{ RBRACE, "}" },
+		{ COMMA, "," },
+		{ SEMICOLON, ";" }
+	};
+
 	Token t;
 	Lexer l = newLexer(input);
-	printf("char: %c\n", l.ch);
-	t = nextToken(l);
-	_assert(t.Type == token.Type);
+	int i = 0;
+	int numtokens = (sizeof tokens) / (sizeof t);
+	while(i <= numtokens-1) {
+		nextToken(&l, &t);
+		printf("%d\n", t.Type);
+		_assert(t.Type == tokens[i++].Type);
+	}
 	return 0;
 }
 
