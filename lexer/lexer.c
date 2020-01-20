@@ -7,8 +7,8 @@
 Identifier newIdentifier ()
 {
 	Identifier id;
-	id.start = NULL;
-	id.end = NULL;
+	id.start = (char *) malloc(sizeof(char));
+	id.end = (char *) malloc(sizeof(char));
 	return id;
 }
 
@@ -77,6 +77,8 @@ void consumeWhitespace(Lexer *lx)
 	while (isspace(lx->ch))
 		readChar(lx);
 }
+
+
 
 /* nextToken : return token depending on char under examination */
 void nextToken(Lexer *lx, Token *tk)
