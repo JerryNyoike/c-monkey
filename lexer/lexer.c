@@ -79,56 +79,52 @@ void consumeWhitespace(Lexer *lx)
 }
 
 /* nextToken : return token depending on char under examination */
-Token nextToken(Lexer lx)
+void nextToken(Lexer *lx, Token *tk)
 {
-	Token tk;
-	initToken(&tk);
+	initToken(tk);
 
-	consumeWhitespace(&lx);
+	consumeWhitespace(lx);
 
-	switch (lx.ch) {
+	switch (lx->ch) {
 		case '=':
-			newToken(&tk, ASSIGN, &lx.ch);
+			newToken(tk, ASSIGN, &lx->ch);
 			break;
 		case ';':
-			newToken(&tk, SEMICOLON, &lx.ch);
+			newToken(tk, SEMICOLON, &lx->ch);
 			break;
 		case '(':
-			newToken(&tk, LPAREN, &lx.ch);
+			newToken(tk, LPAREN, &lx->ch);
 			break;
 		case ')':
-			newToken(&tk, RPAREN, &lx.ch);
+			newToken(tk, RPAREN, &lx->ch);
 			break;
 		case ',':
-			newToken(&tk, COMMA, &lx.ch);
+			newToken(tk, COMMA, &lx->ch);
 			break;
 		case '+':
-			newToken(&tk, PLUS, &lx.ch);
+			newToken(tk, PLUS, &lx->ch);
 			break;
 		case '{':
-			newToken(&tk, LBRACE, &lx.ch);
+			newToken(tk, LBRACE, &lx->ch);
 			break;
 		case '}':
-			newToken(&tk, LBRACE, &lx.ch);
+			newToken(tk, RBRACE, &lx->ch);
 			break;
 		case 0:
-			newToken(&tk, _EOF, "");
+			newToken(tk, _EOF, "");
 			break;
 		default:
-			if (isLetter(lx.ch)) {
-				Identifier id = readIdentifier(lx);
-				newToken(&tk, lookupIdentifier(tk.Literal), memcpy(tk.Literal, id.start, (id.end-id.start)));
-				return tk;
-			} else if (isdigit(lx.ch)) {
-				Identifier num = readNumber(lx);
-				newToken(&tk, INT, memcpy(tk.Literal, num.start, (num.end-num.start)));
-				return tk;
+			if (isLetter(lx->ch)) {
+				Identifier id = readIdentifier(*lx);
+				newToken(tk, lookupIdentifier(tk->Literal), memcpy(tk->Literal, id.start, (id.end-id.start)));
+			} else if (isdigit(lx->ch)) {
+				Identifier num = readNumber(*lx);
+				newToken(tk, INT, memcpy(tk->Literal, num.start, (num.end-num.start)));
 			} else {
-				 newToken(&tk, ILLEGAL, &lx.ch);
+				 newToken(tk, ILLEGAL, &lx->ch);
 			}
 			break;
 	}
 
-	readChar(&lx);
-	return tk;
+	readChar(lx);
 }
