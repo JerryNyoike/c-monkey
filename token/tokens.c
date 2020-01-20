@@ -5,7 +5,7 @@
 /* initToken: set the Literal to NULL to ensure it's always initialised */
 void initToken(Token *tk)
 {
-	tk->Literal = NULL;
+	tk->Literal = (char *) malloc(sizeof(char)*54);
 }
 
 /* lookupIdentifier : checks if an identifier is a keyword or not */
