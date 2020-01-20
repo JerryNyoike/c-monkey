@@ -1,8 +1,8 @@
-lexer: lexer/lexer.c
-	gcc lexer/lexer.c -o lexer
+monkey: monkey.h lexer/lexer.c token/tokens.c tests.c
+	gcc lexer/lexer.c token/tokens.c monkey.h
 
-tokens : token/tokens.c
-	gcc token/tokens.c -o tokens
+test: monkey.h lexer/lexer.c token/tokens.c tests.c
+	gcc tests.c lexer/lexer.c token/tokens.c monkey.h
 
-run_tests: tests.c
-	gcc tests.c -o tests && ./tests
+run: test
+	./a.out
