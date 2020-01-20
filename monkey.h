@@ -75,7 +75,7 @@ int isLetter(char ch);
 void consumeWhitespace(Lexer *lx);
 
 /* nextToken : return token depending on char under examination */
-Token nextToken(Lexer lx);
+void nextToken(Lexer *lx, Token *tk);
 
 /* initToken: set the Literal to NULL to ensure it's always initialised */
 void initToken(Token *tk);
